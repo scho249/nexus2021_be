@@ -1,5 +1,5 @@
-import mysql from 'mysql2';
-import { DB } from '../config';
+const mysql = require('mysql2')
+const DB = require('../config')_
 
 const pool = mysql.createPool({
   host: DB.HOST,
