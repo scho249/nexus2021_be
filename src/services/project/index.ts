@@ -1,9 +1,9 @@
-import { Pool, RowDataPacket } from 'mysql2/promise';
-import { Project, ProjectDetails, Contract } from '../../types';
+const { Pool, RowDataPacket } = require('mysql2/promise')
+const { Project, ProjectDetails, Contract } = require('../../modules/types')
 import * as SQL from './sql';
 
 import algoliasearch, { SearchIndex } from 'algoliasearch';
-import { ALGOLIA_APP_ID, ALGOLIA_API_KEY } from '../../config';
+const { ALGOLIA_APP_ID, ALGOLIA_API_KEY } = require('../../config');
 
 export default class ProjectService {
   db: Pool;
@@ -16,14 +16,14 @@ export default class ProjectService {
     this.searchIndex = searchClient.initIndex(this.SEARCH_INDEX_NAME);
   }
 
-  async validateOwner(projectId: string, username: string): Promise<void> {
+  async function validateOwner(projectId: string, username: string): Promise<void> {
     const [res] = await this.db.execute(SQL.getOwnerUsername, [projectId]);
     if (!res[0] || username != res[0].username) {
       throw new Error('Unauthorized operation on project.');
     }
   }
 
-  async createProject(username: string, details: ProjectDetails): Promise<string> {
+  async function createProject(username: string, details: ProjectDetails): Promise<string> {
     const { title, description, size, duration, postal, status } = details;
     const conn = await this.db.getConnection();
 
@@ -44,7 +44,7 @@ export default class ProjectService {
     }
   }
 
-  async getProjectDetails(projectId: string): Promise<ProjectDetails> {
+  async function getProjectDetails(projectId: string): Promise<ProjectDetails> {
     try {
       const [res] = await this.db.execute(SQL.getProjectDetailsById, [projectId]);
       let projectDetails: ProjectDetails;
@@ -74,7 +74,7 @@ export default class ProjectService {
     }
   }
 
-  async getProjectsOwned(username: string): Promise<ProjectDetails[]> {
+  async function getProjectsOwned(username: string): Promise<ProjectDetails[]> {
     try {
       const [res] = await this.db.execute(SQL.getProjectsOwned, [username]);
       return res as ProjectDetails[];
@@ -83,7 +83,7 @@ export default class ProjectService {
     }
   }
 
-  async getProject(projectId: string): Promise<Project> {
+  async function getProject(projectId: string): Promise<Project> {
     try {
       const projectDetails = await this.getProjectDetails(projectId);
       if (!projectDetails) return null;
@@ -113,7 +113,7 @@ export default class ProjectService {
     }
   }
 
-  async getProjectContracts(username: string, projectId: string): Promise<Contract[]> {
+  async function getProjectContracts(username: string, projectId: string): Promise<Contract[]> {
     await this.validateOwner(projectId, username);
 
     try {
@@ -139,7 +139,7 @@ export default class ProjectService {
     }
   }
 
-  async updateProject(username: string, projectId: string, project: Project): Promise<void> {
+  async function updateProject(username: string, projectId: string, project: Project): Promise<void> {
     await this.validateOwner(projectId, username);
     const { details, skills, roles, interests, exercises } = project;
     const conn = await this.db.getConnection();
@@ -199,7 +199,7 @@ export default class ProjectService {
     }
   }
 
-  async deleteProject(username: string, projectId: string): Promise<void> {
+  async function deleteProject(username: string, projectId: string): Promise<void> {
     await this.validateOwner(projectId, username);
     const conn = await this.db.getConnection();
 
@@ -240,7 +240,7 @@ export default class ProjectService {
     });
   }
 
-  async updateProjectIndex(projectId: string, project: Project): Promise<void> {
+  async function updateProjectIndex(projectId: string, project: Project): Promise<void> {
     const { details, skills, roles, interests } = project;
     const { object } = await this.searchIndex.getObject(projectId);
 

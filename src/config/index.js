@@ -1,4 +1,4 @@
-import { config } from 'dotenv';
+const config = require('dotenv')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 

@@ -21,11 +21,11 @@ export const insertProject = `
     (SELECT U.user_id
       FROM user U
       JOIN student S ON S.user_id = U.user_id
-      WHERE username = ?), 
-    ?, ?, 
+      WHERE username = ?),
+    ?, ?,
     (SELECT size_id FROM team_size WHERE name = ?),
     (SELECT duration_id FROM duration WHERE name = ?),
-    (SELECT status_id FROM status WHERE name = ?),    
+    (SELECT status_id FROM status WHERE name = ?),
     ?, CURDATE(), CURDATE()
   );
 `;
@@ -174,10 +174,22 @@ export const updateProjectExercises = (roles: string[]): string => `
 `;
 
 // [projectId]
-export const deleteProjectContracts = `DELETE FROM contract WHERE project_id = ?;`;
-export const deleteProjectSaved = `DELETE FROM saved_project WHERE project_id = ?;`;
-export const deleteProjectInterests = `DELETE FROM project_interest WHERE project_id = ?;`;
-export const deleteProjectSkills = `DELETE FROM project_skill WHERE project_id = ?;`;
-export const deleteProjectRoles = `DELETE FROM project_role WHERE project_id = ?;`;
-export const deleteProjectExercises = `UPDATE project_role SET exercise = NULL WHERE project_id = ?;`;
+export const deleteProjectContracts = `
+DELETE FROM contract WHERE project_id = ?;`;
+
+export const deleteProjectSaved = `
+DELETE FROM saved_project WHERE project_id = ?;`;
+
+export const deleteProjectInterests = `
+DELETE FROM project_interest WHERE project_id = ?;`;
+
+export const deleteProjectSkills = `
+DELETE FROM project_skill WHERE project_id = ?;`;
+
+export const deleteProjectRoles = `
+DELETE FROM project_role WHERE project_id = ?;`;
+
+export const deleteProjectExercises = `
+UPDATE project_role SET exercise = NULL WHERE project_id = ?;`;
+
 export const deleteProject = `DELETE FROM project WHERE project_id = ?;`;
