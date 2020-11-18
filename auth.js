@@ -15,7 +15,7 @@ import { JWT_SECRET, FE_ADDR, DOMAIN } from '../config';
  * @apiHeader {String}  cookie       Includes jwt token in `jwt` field, e.g. `jwt={token}`
  * @apiHeader {Boolean} credentials  Must be set to `true`
  */
-const register = (srv) => async (req, res, next) {
+const register = (srv: ProjectService) => async (req:Request, res:Response, next): Promise<void> => {
     const user = req.body;
     try {
         user.userId = await srv.createUser(user);
