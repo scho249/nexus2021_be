@@ -100,23 +100,36 @@ const SQL = require('../services/project/sql.js')
 //
 const router = Router();
 const projectService = new ProjectService(Pool);
-// router.post('/', createProject(projectService));
-// router.get('/owned', getProjectsOwned(projectService));
-// router.get('/:projectId', getProjectById(projectService));
 
-function runIt() {
-conn.execute(SQL.getOwnerUsername, ['45'],
-     function(err, results) {
-     console.log('The solution is: ', results[0].username);
-     return results[0].username;
-});
+// function runIt() {
+//   conn.execute(SQL.getOwnerUsername, ['45'],
+//      function(err, results) {
+//      console.log('The solution is: ', results[0].username);
+//      return results[0].username;
+//       });
+// }
+
+async function tableExists(pool, tableName) {
+    try {
+        const query = `SELECT 1 FROM ${tableName} LIMIT 1;`;
+        await pool.execute(query);
+        console.log('True')
+        return true;
+    } catch (err) {
+        return false;
+    }
 }
 
+async function check(projectSrv) {
+    await projectSrv.validateOwner('45','kwin');
+}
 
 router.get('/', (req, res) => {
-  const results = runIt();
-  res.send('Some projects' + results);
+    check(projectService);
+    const results = tableExists(conn, 'student');
+    res.send('Table student exists: ' + results);
 })
+
 // router.patch('/:projectId', updateProject(projectService));
 // router.delete('/:projectId', deleteProject(projectService));
 // router.get('/:projectId/contracts', getProjectContracts(projectService));

@@ -1,4 +1,4 @@
-const mysql = require('mysql2')
+const mysql = require('mysql2/promise')
 const { DB_HOST, DB_PORT, DB_SOCKET, DB_USER, DB_NAME, DB_PASS } = require('../config/index.js')
 
 // const pool = mysql.createPool({
@@ -27,21 +27,3 @@ var conn = mysql.createPool({
 
 module.exports = conn;
 // exports.promisePool = conn.promise();
-
-
-// async function countStudents() {
-//     try {
-//       const res = await conn.execute('SELECT COUNT(*) FROM student');
-//       exports.results = res;
-//     } catch (err) {
-//       throw err;
-//     }
-//   };
-
-// conn.query('describe student',
-//   function (error, results, fields) {
-//     // error will be an Error if one occurred during the query
-//     exports.results = results;
-//     // results will contain the results of the query
-//     // fields will contain information about the returned results fields (if any)
-// });
