@@ -99,7 +99,7 @@ const SQL = require('../services/project/sql.js')
 // };
 //
 const router = Router();
-const projectService = new ProjectService(Pool);
+// const projectService = new ProjectService(Pool);
 
 // function runIt() {
 //   conn.execute(SQL.getOwnerUsername, ['45'],
@@ -125,9 +125,9 @@ const projectService = new ProjectService(Pool);
 // }
 
 router.get('/', (req, res) => {
-    check(projectService);
-    const results = tableExists(conn, 'student');
-    res.send('Table student exists: ' + results);
+    // check(projectService);
+    // const results = tableExists(conn, 'student');
+    res.send('Empty project page');
 })
 
 // router.patch('/:projectId', updateProject(projectService));
