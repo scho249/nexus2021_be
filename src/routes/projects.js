@@ -109,20 +109,20 @@ const projectService = new ProjectService(Pool);
 //       });
 // }
 
-async function tableExists(pool, tableName) {
-    try {
-        const query = `SELECT 1 FROM ${tableName} LIMIT 1;`;
-        await pool.execute(query);
-        console.log('True')
-        return true;
-    } catch (err) {
-        return false;
-    }
-}
-
-async function check(projectSrv) {
-    await projectSrv.validateOwner('45','kwin');
-}
+// async function tableExists(pool, tableName) {
+//     try {
+//         const query = `SELECT 1 FROM ${tableName} LIMIT 1;`;
+//         await pool.execute(query);
+//         console.log('True')
+//         return true;
+//     } catch (err) {
+//         return false;
+//     }
+// }
+//
+// async function check(projectSrv) {
+//     await projectSrv.validateOwner('45','kwin');
+// }
 
 router.get('/', (req, res) => {
     check(projectService);
