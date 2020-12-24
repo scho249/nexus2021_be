@@ -1,12 +1,21 @@
 const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
-const config = require('dotenv');
+
+const config = require('dotenv'); // .env file
+
+// single database connection shared to all routes
+// other routes can access using getDb
+const initDb = require("./db/db.js").initDb;
+const getDb = require("./db/db.js").getDb;
 // const { registerRoutes } = require('./routes');
 
 const indexRouter=require('./routes/index.js')
 const projectsRouter=require('./routes/projects.js')
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 
 app.set('view engine','ejs')
@@ -15,17 +24,17 @@ app.set('layout','layouts/layout')
 app.use(expressLayouts)
 app.use(express.static('public'))
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/nexus',
-{ useUnifiedTopology: true, useNewUrlParser: true});
 
-const db = mongoose.connection;
-db.on('error', error => console.error(error));
-db.once('open', function() {
-    console.log('we\'re connected!')
-  });
+const port = 3001;
 
-
+initDb(function (err) {
+    app.listen(port, (err) => {
+        if (err) {
+            throw err; //
+        }
+        console.log("API Up and running on port " + port);
+    })}
+);
 
 app.use('/index', indexRouter)
 app.get('/', (req, res) => {

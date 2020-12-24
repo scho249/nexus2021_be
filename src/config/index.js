@@ -1,11 +1,21 @@
-const config = require('dotenv')
+// const config = require('dotenv')
+require('dotenv').config();
 
 process.env.NODE_ENV = 'development'; // process.env.NODE_ENV || 'development'
+// if (process.env.NODE_ENV !== 'production') {
+//
+// }
 
 // const { error } = config();
 // if (error) {
 //   throw new Error('⚠️  .env file not found  ⚠️');
 // }
+
+exports.MONGODB_URI = process.env.MONGOOSECONNECTIONSTRING;
+exports.MONGODB_CONNECT = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+};
 
 exports.DOMAIN = 'localhost'; // process.env.DOMAIN || 'localhost'
 exports.FE_ADDR = 'http://localhost:3000'; // process.env.FE_ADDR || 'http://localhost:3000'
