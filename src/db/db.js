@@ -2,8 +2,8 @@ const assert = require("assert");
 const client = require("mongodb").MongoClient;
 const config = require("../config/index.js");
 
-
-
+// Credits to Sello Mkantjwa's article on Medium
+// itnext.io/how-to-share-a-single-database-connection-in-a-node-js-express-js-app-fcad4cbcb1e
 let _db;
 
 // Initializes database connection using URI handle
