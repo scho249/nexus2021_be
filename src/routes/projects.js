@@ -1,5 +1,6 @@
 const { Router, Request, Response } = require('express')
 const Project = require('../models/project.js')
+const User = require('../models/user.js')
 const getDb = require("./db/db.js").getDb
 
 // const Pool = require('mysql2/promise')
@@ -15,16 +16,15 @@ const getDb = require("./db/db.js").getDb
 
 
 async function createProject(req, res) {
-  const newProject = new Project({
-
-  });
-  const { username } = req.user as User;
-
   try {
-    const projectId = await srv.createProject(username, project.details);
-    srv.indexProject(projectId, project);
-    await srv.updateProject(username, projectId, project);
-    res.json({ projectId });
+    var newProject = new Project(req.project);
+    await newProject.save();
+
+    const user = await User.findOne({ username: req.project.user });
+    user.projects.push(newProject);
+    await user.save();
+
+    res.json({newProject._id});
   } catch (error) {
     res.json({ error  });
   }
