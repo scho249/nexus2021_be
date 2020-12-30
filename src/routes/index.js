@@ -1,5 +1,5 @@
 const { Router, Request, Response } = require('express')
-const { Pool } = require('mysql2/promise')
+// const { Pool } = require('mysql2/promise')
 const passport = require('passport');
 // const result = require('../db/index.js')
 // const auth = require('./auth';
@@ -9,7 +9,7 @@ const passport = require('passport');
 // const saved = require('./saved');
 // const options = require('./options');
 
-const authenticateJwt = passport.authenticate('jwt', { session: false });
+// const authenticateJwt = passport.authenticate('jwt', { session: false });
 
 // export default (app: Application, db: Pool): void => {
 //   app.use('/auth', auth(db));

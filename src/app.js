@@ -7,44 +7,49 @@ const config = require('dotenv'); // .env file
 const initDb = require("./db/db.js").initDb
 const getDb = require("./db/db.js").getDb
 const bodyParser = require("body-parser")
+const cors = require("cors");
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
-const port = 3001;
-
-initDb(function (err) {
-    app.listen(port, (err) => {
-        if (err) {
-            throw err; //
-        }
-        console.log("API Up and running on port " + port);
-    })}
-);
-
+var corsOptions = {
+  origin: "http://localhost:3101"
+};
 
 const indexRouter = require('./routes/index.js')
-const projectsRouter = require('./routes/projects.js')
+// const projectsRouter = require('./routes/projects.js')
 
 const app = express()
 
-
-app.set('view engine','ejs')
+// app.set('view engine','ejs')
 app.set('views', __dirname + '/views')
-app.set('layout','layouts/layout')
-app.use(expressLayouts)
+// app.set('layout','layouts/layout')
+// app.use(expressLayouts)
 app.use(express.static('public'))
+
+// parse requests of content-type - application/json
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use('/index', indexRouter)
 app.get('/', (req, res) => {
-  res.send('NEXUS UW App Backend 1')
+  res.json({ message: "Welcome to NEXUS UW application." });
 })
-app.use('/', indexRouter);
-app.use('/projects', projectsRouter);
+// app.use('/', indexRouter);
+// app.use('/projects', projectsRouter);
+
+const PORT = process.env.PORT || 3100;
+
+initDb(function (err) {
+    app.listen(PORT, (err) => {
+        if (err) {
+            throw err; //
+        }
+        console.log("API Up and running on port " + PORT);
+    })}
+);
 
 
-app.listen(process.env.PORT || 3000), ()
-    => console.log(`Server running on port ${process.env.PORT}`);
+// app.listen(PORT), ()  => { console.log(`Server running on port ${PORT}.`) };

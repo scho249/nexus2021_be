@@ -9,13 +9,13 @@ const userSchema = new Schema({
     createdDate: { type: Date, default: Date.now }
 });
 
-schema.set('toJSON', {
-    virtuals: true,
-    versionKey: false,
-    transform: function (doc, ret) {
-        delete ret._id;
-        delete ret.hash;
-    }
-});
+// Schema.set('toJSON', {
+//     virtuals: true,
+//     versionKey: false,
+//     transform: function (doc, ret) {
+//         delete ret._id;
+//         delete ret.hash;
+//     }
+// });
 
-module.exports = mongoose.model('User', userschema);
+module.exports = mongoose.model('User', userSchema);

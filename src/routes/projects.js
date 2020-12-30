@@ -24,7 +24,7 @@ async function createProject(req, res) {
     user.projects.push(newProject);
     await user.save();
 
-    res.json({newProject._id});
+    res.json(`${newProject._id}`);
   } catch (error) {
     res.json({ error  });
   }
