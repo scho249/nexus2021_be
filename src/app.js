@@ -17,6 +17,8 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
+const app = express()
+
 var corsOptions = {
   origin: "http://localhost:3101"
 };
@@ -24,7 +26,6 @@ var corsOptions = {
 const indexRouter = require('./routes/index.js')
 // const projectsRouter = require('./routes/projects.js')
 
-const app = express()
 
 app.set('view engine','ejs')
 app.set('views', __dirname + '/views')
@@ -33,11 +34,21 @@ app.use(expressLayouts)
 app.use(express.static('public'))
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to NEXUS UW application." });
+});
+
+// set port, listen for requests
 const PORT = process.env.PORT || 3100;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
 
 // initDb(function (err) {
 //     app.listen(PORT, (err) => {
@@ -73,7 +84,7 @@ db.mongoose
   })
   .then(() => {
     console.log("Successfully connect to MongoDB.");
-    initial();
+    // initial();
   })
   .catch(err => {
     console.error("Connection error", err);
@@ -81,11 +92,7 @@ db.mongoose
   });
 
 
-// app.use('/', indexRouter);
-app.use('/', (req, res) => {
-  res.json({ message: "Welcome to NEXUS UW application." });
-});
-app.listen(PORT), ()  => { console.log(`Server running on port ${PORT}.`) };
-
+require('./routes/auth.js')(app);
+// require('./routes/user')(app);
 // app.use('/', indexRouter);
 // app.use('/projects', projectsRouter);

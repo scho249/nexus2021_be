@@ -50,8 +50,8 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
 // };
 
 const verifySignUp = {
-  checkDuplicateUsernameOrEmail,
-  checkRolesExisted
+  checkDuplicateUsernameOrEmail
+  // checkRolesExisted
 };
 
 module.exports = verifySignUp;

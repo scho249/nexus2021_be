@@ -4,14 +4,15 @@ const User = require('../models/user.js')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-module.exports = {
-    signIn,
-    createUser,
-    resetPassword
-};
-
 exports.signIn = (req, res) => {
-    const user = await User.findOne({ username: req.body.username });
+    User.findOne({ username: req.body.username })
+        .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      console.log(user.username + user.password)
+
     var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
@@ -24,7 +25,7 @@ exports.signIn = (req, res) => {
         });
     }
 
-    var token = jwt.sign({ id: user.id }, config.JWT_SECRET, {
+    var token = jwt.sign({ id: user._id }, config.JWT_SECRET, {
         expiresIn: 86400 // 24 hours
     });
 
@@ -34,10 +35,11 @@ exports.signIn = (req, res) => {
         email: user.email,
         accessToken: token
       });
+  });
 };
 
 exports.resetPassword = (req, res) => {
-  const user = await User.findOne({ username: req.body.username });
+  const user = User.findOne({ username: req.body.username });
 
   if (req.body.password) {
       req.body.password = bcrypt.hashSync(req.body.password, 10);
@@ -51,7 +53,7 @@ exports.resetPassword = (req, res) => {
           return;
       }
       res.send({ message: "User was updated successfully!" });
-  }
+  });
 }
 
 // async function getById(id) {
@@ -60,7 +62,7 @@ exports.resetPassword = (req, res) => {
 
 exports.requestPasswordReset = (req, res) => {
   const { email } = req.query;
-  const user = await User.findOne({ email: req.body.email });
+  const user = User.findOne({ email: req.body.email });
 
   var token = jwt.sign({ username: user.username }, config.JWT_SECRET, {expiresIn: 86400 });
   // await mailer.sendPasswordResetIntru(email, jwtToken);
@@ -73,10 +75,13 @@ exports.requestPasswordReset = (req, res) => {
 };
 
 exports.createUser = (req, res) => {
+    console.log(req.body.password);
     const user = new User({
         username: req.body.username,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 10)
+        password: bcrypt.hashSync(req.body.password, 10),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
     });
 
     // save user
@@ -86,8 +91,8 @@ exports.createUser = (req, res) => {
             return;
         }
         res.send({ message: "User was registered successfully!" });
-    }
-}
+    })
+};
 
 // exports.update = (req, res) => {
 //     const user = await User.findById(id);

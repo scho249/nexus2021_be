@@ -43,8 +43,7 @@ const User = require('../models/user.js')
    app.post(
      "/api/auth/createUser",
      [
-       verifySignUp.checkDuplicateUsernameOrEmail,
-       verifySignUp.checkRolesExisted
+       verifySignUp.checkDuplicateUsernameOrEmail
      ],
      UserService.createUser
    );
@@ -66,7 +65,7 @@ const User = require('../models/user.js')
      *
      * @apiUse JwtHeader
      */
-    app.get('/api/auth/verify', authJwt);
+    // app.get('/api/auth/verify', [ authJwt ], res.status(200).send("Token verified"));
 
     /**
      * @api {get} /auth/password-reset Request password reset token by email
