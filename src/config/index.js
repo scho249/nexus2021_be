@@ -11,7 +11,7 @@ process.env.NODE_ENV = 'development'; // process.env.NODE_ENV || 'development'
 //   throw new Error('⚠️  .env file not found  ⚠️');
 // }
 
-exports.MONGODB_URI = process.env.MONGOOSECONNECTIONSTRING;
+exports.MONGODB_URI = process.env.MONGODB_URI;
 // exports.MONGODB_CONNECT = {
 //       useNewUrlParser: true,
 //       useUnifiedTopology: true

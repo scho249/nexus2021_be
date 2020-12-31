@@ -1,6 +1,10 @@
 const { Router, Request, Response } = require('express')
 // const { Pool } = require('mysql2/promise')
 const passport = require('passport');
+
+const getDb = require("../db/db.js").getDb;
+const User = require("../models/user.js");
+
 // const result = require('../db/index.js')
 // const auth = require('./auth';
 // const students = require('./students');
@@ -20,11 +24,9 @@ const passport = require('passport');
 //   app.use('/options', options(db));
 // };
 
-
 const router = Router();
 router.get('/', (req, res) => {
-  res.send('Hello World 1');
-  // res.send(result);
-})
+  res.json('Adding user kwin right now...');
+});
 
 module.exports = router
