@@ -33,10 +33,10 @@ const handlebarsOptions = {
   extName: '.html',
 };
 
-const gmailTransport = nodemailer.createTransport(transportConfig);
-gmailTransport.use('compile', hbs(handlebarsOptions));
 
-exports.sendPasswordResetIntru = async(email, jwt) {
+
+
+exports.sendPasswordResetIntru = async(email, jwt) => {
   const data = {
     to: email,
     template: 'password-reset-instru-email',
@@ -45,13 +45,14 @@ exports.sendPasswordResetIntru = async(email, jwt) {
       url: `${FE_ADDR}/password-reset/${jwt}`,
     },
   };
+  const gmailTransport = nodemailer.createTransport(transportConfig);
+  gmailTransport.use('compile', hbs(handlebarsOptions));
   try {
-    let info = await gmailTransport.sendMail(data);
+    const info = await gmailTransport.sendMail(data);
     return info;
   } catch(e) {
   console.log(e);
-  res.sendStatus(500);
   }
-}
+};
 
-exports.sendEmail = sendPasswordResetIntru;
+// exports.sendEmail = sendPasswordResetIntru;

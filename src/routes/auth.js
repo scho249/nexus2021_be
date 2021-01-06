@@ -75,7 +75,7 @@ const User = require('../models/user.js')
      *
      * @apiParam {String} email Email, as a query param (e.g. `/auth/password-reset?email=your@email.com`)
      */
-    app.get('/api/auth/password-reset', UserService.requestPasswordReset);
+    // app.get('/api/auth/password-reset', UserService.requestPasswordReset);
 
     /**
      * @api {patch} /auth/password-reset Reset password

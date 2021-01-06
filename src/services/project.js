@@ -1,22 +1,61 @@
 // const { Pool, RowDataPacket } = require('mysql2/promise')
 // const mysql = require('mysql2/promise')
-// // const { Project, ProjectDetails, Contract } = require('../../types.ts')
+// const { Project, ProjectDetails, Contract } = require('../../types.ts')
 // const SQL = require('./sql.js')
-// const conn = require('../../db/index.js')
+// // const conn = require('../../db/index.js')
 // const { algoliasearch, SearchIndex } = require('algoliasearch')
 // const { ALGOLIA_APP_ID, ALGOLIA_API_KEY } = require('../../config/index.js')
-//
-// class ProjectService {
-//   // db = conn;
-//   // searchIndex = SearchIndex;
-//   // SEARCH_INDEX_NAME = 'projects';
-//
-//   constructor(promisePool) {
-//     this.db = promisePool;
-//     // const searchClient = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
-//     // this.searchIndex = searchClient.initIndex(this.SEARCH_INDEX_NAME);
-//   }
-//
+
+const config = require('../config/index.js');
+const User = require('../models/user.js')
+const Project = require('../models/project.js')
+const Skill = require('../models/skill.js')
+const Role = require('../models/role.js')
+const Interest = require('../models/interest.js')
+const jwt = require('jsonwebtoken');
+
+
+exports.createProject = (req, res) => {
+    console.log(req.body.password);
+    const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 10),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
+    });
+
+    // save user
+    user.save((err, user) => {
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+        }
+        res.send({ message: "User was registered successfully!" });
+    })
+};
+
+async function createProject(username, details) {
+  const { title, description, size, duration, postal, status } = details;
+  const conn = await this.db.getConnection();
+
+  try {
+    conn.beginTransaction();
+    const projectParams = [username, title, description, size, duration, status || 'Active', postal];
+    const [projectRes] = await conn.execute(SQL.insertProject, projectParams);
+    const projectId = projectRes['insertId'];
+
+    await conn.commit();
+    conn.release();
+
+    return projectId;
+  } catch (err) {
+    await conn.rollback();
+    conn.release();
+    throw err;
+  }
+}
+
 //   async validateOwner (projectId, username) {
 //       const [res] = await this.db.execute(SQL.getOwnerUsername, [projectId]);
 //       if (!res[0] || username != res[0].username) {
@@ -24,26 +63,7 @@
 //       }
 //   }
 // // //
-// //   async function createProject(username, details) {
-// //     const { title, description, size, duration, postal, status } = details;
-// //     const conn = await this.db.getConnection();
-// //
-// //     try {
-// //       conn.beginTransaction();
-// //       const projectParams = [username, title, description, size, duration, status || 'Active', postal];
-// //       const [projectRes] = await conn.execute(SQL.insertProject, projectParams);
-// //       const projectId = projectRes['insertId'];
-// //
-// //       await conn.commit();
-// //       conn.release();
-// //
-// //       return projectId;
-// //     } catch (err) {
-// //       await conn.rollback();
-// //       conn.release();
-// //       throw err;
-// //     }
-// //   }
+
 // //
 // //   async function getProjectDetails(projectId) {
 // //     try {

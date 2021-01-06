@@ -15,20 +15,7 @@ const getDb = require("./db/db.js").getDb
  */
 
 
-async function createProject(req, res) {
-  try {
-    var newProject = new Project(req.project);
-    await newProject.save();
 
-    const user = await User.findOne({ username: req.project.user });
-    user.projects.push(newProject);
-    await user.save();
-
-    res.json(`${newProject._id}`);
-  } catch (error) {
-    res.json({ error  });
-  }
-};
 
 // const getProjectsOwned = (srv: ProjectService) => async (req: Request, res: Response): Promise<void> => {
 //   const { username } = req.user as User;

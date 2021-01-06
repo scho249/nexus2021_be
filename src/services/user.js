@@ -1,6 +1,6 @@
 const config = require('../config/index.js');
 const User = require('../models/user.js')
-const mailer = require('./mailer')
+const mailer = require('./mailer/index.js')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -60,21 +60,21 @@ exports.resetPassword = (req, res) => {
 //     return await User.findById(id);
 // }
 
-async function requestPasswordReset(req, res) {
-  const { email } = req.query;
-  const user = User.findOne({ email: req.body.email });
-  console.log(`${user.email}`);
-  var token = jwt.sign({ username: user.username }, config.JWT_SECRET, { expiresIn: 86400 });
-  let msg = await mailer.sendEmail(email, token);
-  res.send('Email sent for user `${user.username}`, msg id is %s', msg.messageID);
+// async function requestPasswordReset(req, res) {
+//   const { email } = req.query;
+//   const user = User.findOne({ email: req.body.email });
+//   console.log(`${user.email}`);
+//   var token = jwt.sign({ username: user.username }, config.JWT_SECRET, { expiresIn: 86400 });
+//   let msg = await mailer.sendPasswordResetIntru(email, token);
+//   res.send('Email sent for user `${user.username}`, msg id is %s', msg.messageID);
+//
+//   if (err) {
+//     res.status(500).send({ message: err });
+//     return;
+//   }
+// };
 
-  if (err) {
-    res.status(500).send({ message: err });
-    return;
-  }
-};
-
-exports.requestPasswordReset = requestPasswordReset;
+// exports.requestPasswordReset = requestPasswordReset;
 
 exports.createUser = (req, res) => {
     console.log(req.body.password);
