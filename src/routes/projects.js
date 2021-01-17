@@ -1,21 +1,21 @@
-const { Router, Request, Response } = require('express')
-const Project = require('../models/project.js')
-const User = require('../models/user.js')
-const getDb = require("./db/db.js").getDb
+// const { Router, Request, Response } = require('express')
+// const Project = require('../models/project.js')
+// const User = require('../models/user.js')
+// const getDb = require("./db/db.js").getDb
 
-// const Pool = require('mysql2/promise')
-// const ProjectService = require('../services/project/index.js')
-// const conn = require('../db/index.js')
+const { Router, Request, Response, NextFunction } = require('express')
+const passport = require('passport');
 
+const { verifySignUp, authJwt } = require("../middlewares");
+const ProjectService = require('../services/project.js');
+const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
+// const User = require('../models/user.js')
 
 /**
  * @apiDefine Project API
  *
  * Handles all Project Profile operations.
  */
-
-
-
 
 // const getProjectsOwned = (srv: ProjectService) => async (req: Request, res: Response): Promise<void> => {
 //   const { username } = req.user as User;
@@ -88,28 +88,43 @@ const getDb = require("./db/db.js").getDb
 // };
 //
 
-const router = Router();
+module.exports = function(app) {
+  app.use(function(req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+    });
 
-/**
- * @api {post} /projects Create a new Project
- * @apiGroup ProjectGroup
- * @apiName CreateProject
- *
- * @apiUse JwtHeader
- *
- * @apiParam {Object} details              Project details
- * @apiParam {String} details.title        Project title
- * @apiParam {String} details.description  Project description
- * @apiParam {String} details.duration     Project duration
- * @apiParam {String} details.size         Project team size
- * @apiParam {String} details.postal       Project postal code
- *
- * @apiSuccess {Number} projectId Project ID
- */
-router.post('/', createProject(req, res));
+    /**
+     * @api {post} /projects Create a new Project
+     * @apiGroup ProjectGroup
+     * @apiName CreateProject
+     *
+     * @apiUse JwtHeader
+     *
+     * @apiParam {Object} details              Project details
+     * @apiParam {String} details.title        Project title
+     * @apiParam {String} details.description  Project description
+     * @apiParam {String} details.duration     Project duration
+     * @apiParam {String} details.size         Project team size
+     * @apiParam {String} details.postal       Project postal code
+     *
+     * @apiSuccess {Number} projectId Project ID
+     */
+     app.post(
+       "/api/project/createProject",
+       ProjectService.createProject
+     );
+
+
+};
+
+
 
 // TODO: apidoc
-router.get('/owned', getProjectsOwned(projectService));
+// router.get('/owned', getProjectsOwned(projectService));
 
 /**
  * @api {get} /projects/:projectId Get Project
@@ -133,7 +148,7 @@ router.get('/owned', getProjectsOwned(projectService));
  * @apiSuccess {String[]} roles              Project roles
  * @apiSuccess {String[]} interests          Project interests
  */
-router.get('/:projectId', getProjectById(projectService));
+// router.get('/:projectId', getProjectById(projectService));
 
 /**
  * @api {patch} /projects/:projectId Update Project
@@ -155,7 +170,7 @@ router.get('/:projectId', getProjectById(projectService));
  * @apiParam {String[]} roles                Project roles
  * @apiParam {String[]} interests            Project interests
  */
-router.patch('/:projectId', updateProject(projectService));
+// router.patch('/:projectId', updateProject(projectService));
 
 /**
  * @api {delete} /projects/:projectId Delete Project
@@ -164,9 +179,9 @@ router.patch('/:projectId', updateProject(projectService));
  *
  * @apiUse JwtHeader
  */
-router.delete('/:projectId', deleteProject(projectService));
+// router.delete('/:projectId', deleteProject(projectService));
 
 // TODO: apidoc
-router.get('/:projectId/contracts', getProjectContracts(projectService));
+// router.get('/:projectId/contracts', getProjectContracts(projectService));
 
-module.exports = router;
+// module.exports = router;

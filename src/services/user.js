@@ -5,13 +5,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.signIn = (req, res) => {
-    User.findOne({ username: req.body.username })
+    User.findOne({ email: req.body.email })
         .exec((err, user) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
       }
-      console.log(user.username + user.password)
+      console.log(user.email + "pass:" + user.password)
 
     var passwordIsValid = bcrypt.compareSync(
         req.body.password,
@@ -31,7 +31,6 @@ exports.signIn = (req, res) => {
 
     res.status(200).send({
         id: user._id,
-        username: user.username,
         email: user.email,
         accessToken: token
       });
@@ -77,9 +76,7 @@ exports.resetPassword = (req, res) => {
 // exports.requestPasswordReset = requestPasswordReset;
 
 exports.createUser = (req, res) => {
-    console.log(req.body.password);
     const user = new User({
-        username: req.body.username,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 10),
         firstName: req.body.firstName,

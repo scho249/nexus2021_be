@@ -63,7 +63,6 @@ function initial()  {
   User.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
         new User({
-              username: 'kwin',
               email: 'kwin@kwin.com',
               password: bcrypt.hashSync('kwinkwin', 10),
               firstName: 'kwin',
@@ -84,7 +83,7 @@ db.mongoose
   })
   .then(() => {
     console.log("Successfully connect to MongoDB.");
-    // initial();
+    initial();
   })
   .catch(err => {
     console.error("Connection error", err);
@@ -93,6 +92,7 @@ db.mongoose
 
 
 require('./routes/auth.js')(app);
+require('./routes/projects.js')(app);
 // require('./routes/user')(app);
 // app.use('/', indexRouter);
 // app.use('/projects', projectsRouter);

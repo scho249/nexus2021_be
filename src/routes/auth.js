@@ -7,7 +7,7 @@ const UserService = require('../services/user.js');
 // import * as mailer from '../services/mailer';
 const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
 // import { Pool } from 'mysql2/promise';
-const User = require('../models/user.js')
+// const User = require('../models/user.js')
 
 /**
  * @apiDefine AuthGroup Auth API
