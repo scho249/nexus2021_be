@@ -2,20 +2,26 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/index.js");
 const User = require('../models/user.js')
 
-verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+authJwt = (req, res, next) => {
+    const token = req.headers["x-access-token"];
+    const authHeader = req.headers.authorization;
 
-  if (!token) {
-    return res.status(403).send({ message: "No token provided!" });
-  }
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
 
-  jwt.verify(token, config.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({ message: "Unauthorized!" });
+        jwt.verify(token, config.JWT_SECRET, (err, user) => {
+            if (err) {
+                res.status(401).send({ message: "Unauthorized!" });
+                return;
+            }
+            console.log(user.id)
+            req.id = user.id;
+            next();
+        });
+    } else {
+        res.status(403).send({ message: "No token provided!" });
+        return;
     }
-    req.userId = decoded.id;
-    next();
-  });
 };
 
 // isAdmin = (req, res, next) => {
@@ -80,8 +86,8 @@ verifyToken = (req, res, next) => {
 //   });
 // };
 
-const authJwt = {
-  verifyToken
-};
-
+// const authJwt = {
+//   verifyToken
+// };
+//
 module.exports = authJwt;

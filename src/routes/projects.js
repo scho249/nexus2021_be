@@ -89,15 +89,14 @@ const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
 //
 
 module.exports = function(app) {
-  app.use(function(req, res, next) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
-    );
-    next();
-    });
-
-    /**
+      app.use(function(req, res, next) {
+        res.header(
+          "Access-Control-Allow-Headers",
+          "x-access-token, Origin, Content-Type, Accept"
+        );
+        next();
+      });
+      /**
      * @api {post} /projects Create a new Project
      * @apiGroup ProjectGroup
      * @apiName CreateProject
@@ -113,13 +112,16 @@ module.exports = function(app) {
      *
      * @apiSuccess {Number} projectId Project ID
      */
-     app.post(
-       "/api/project/createProject",
-       ProjectService.createProject
-     );
 
-
+    app.post(
+         "/api/project/createProject",
+         [
+           authJwt
+         ],
+         ProjectService.createProject
+    );
 };
+
 
 
 

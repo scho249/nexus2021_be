@@ -59,22 +59,22 @@ app.listen(PORT, () => {
 //     });
 // });
 
-function initial()  {
-  User.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-        new User({
-              email: 'kwin@kwin.com',
-              password: bcrypt.hashSync('kwinkwin', 10),
-              firstName: 'kwin',
-              lastName: 'kwin'
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added 'kwin' to users collection");
-      });
-  }});
-};
+// function initial()  {
+//   User.estimatedDocumentCount((err, count) => {
+//     if (!err && count === 0) {
+//         new User({
+//               email: 'kwin@kwin.com',
+//               password: bcrypt.hashSync('kwinkwin', 10),
+//               firstName: 'kwin',
+//               lastName: 'kwin'
+//       }).save(err => {
+//         if (err) {
+//           console.log("error", err);
+//         }
+//         console.log("added 'kwin' to users collection");
+//       });
+//   }});
+// };
 
 db.mongoose
   .connect(process.env.MONGODB_URI, {
@@ -83,16 +83,12 @@ db.mongoose
   })
   .then(() => {
     console.log("Successfully connect to MongoDB.");
-    initial();
+    // initial();
   })
   .catch(err => {
     console.error("Connection error", err);
     process.exit();
   });
 
-
 require('./routes/auth.js')(app);
 require('./routes/projects.js')(app);
-// require('./routes/user')(app);
-// app.use('/', indexRouter);
-// app.use('/projects', projectsRouter);

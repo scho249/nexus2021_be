@@ -13,51 +13,78 @@ const Project = require('../models/project.js')
 const jwt = require('jsonwebtoken');
 
 
+// exports.createProject = (req, res) => {
+//  // const { user } = req.email
+//      User.findOne({ email: req.body.email })
+//          .exec((err, user) => {
+//                if (err) {
+//                   res.status(500).send({ message: err });
+//                   return;
+//                 }
+//
+//                 const project = new Project({
+//                         title: req.body.title,
+//                         owner_id: user._id,
+//                         size: req.body.size,
+//                         team: [user._id],
+//                         location: {
+//                             city: req.body.location.city,
+//                             postal: req.body.location.postal },
+//                         status: 'New',
+//                         duration: {
+//                             length: req.body.duration.length,
+//                             created_date: Date.now },
+//                         updated_at: Date.now,
+//                         description: req.body.description,
+//                         skill: req.body.skill,
+//                         roles: req.body.roles,
+//                         interests: req.body.interests
+//                 });
+//
+//                 project.save((err, project) => {
+//                     if (err) {
+//                         res.status(500).send({ message: err });
+//                         return;
+//                     }
+//                     res.send({ message: "Project was added successfully!" });
+//                 });
+//
+//                 res.status(200).send({
+//                     id: user._id,
+//                     email: user.email,
+//                     project_id: project._id,
+//                 });
+//         });
+// };
+
 exports.createProject = (req, res) => {
- User.findOne({ email: req.body.email })
-     .exec((err, user) => {
-       if (err) {
-          res.status(500).send({ message: err });
-          return;
+    const project = new Project({
+        title: req.body.title,
+        owner_id: req.id,
+        size: req.body.size,
+        team: [req.id],
+        location: {
+            city: req.body.location.city,
+            postal: req.body.location.postal },
+        status: 'New',
+        duration: {
+            length: req.body.duration.length,
+            created_date: new Date(Date.now()) },
+        updated_at: new Date(Date.now()),
+        description: req.body.description,
+        skill: req.body.skill,
+        roles: req.body.roles,
+        categories: req.body.categories
+    });
+
+    project.save((err, project) => {
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
         }
-
-        const project = new Project({
-            title: req.body.title,
-            owner_id: user._id,
-            size: req.body.size,
-            team: [user._id],
-            location: {
-                city: req.body.location.city,
-                postal: req.body.location.postal },
-            status: 'New',
-            duration: {
-                length: req.body.duration.length,
-                created_date: Date.now },
-            updated_at: Date.now,
-            description: req.body.description,
-            skill: req.body.skill,
-            roles: req.body.roles,
-            interests: req.body.interests
-        });
-
-        res.status(200).send({
-            id: user._id,
-            username: user.username,
-            project_id: project._id,
-
-        });
-        // save user
-        project.save((err, user) => {
-            if (err) {
-                res.status(500).send({ message: err });
-                return;
-            }
-            res.send({ message: "Project was added successfully!" });
-        })
-    })
+        res.send({ message: "Project was added successfully!" });
+    });
 }
-
-
 
 //
 // async function createProject(username, details) {

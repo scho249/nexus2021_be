@@ -4,10 +4,8 @@ const passport = require('passport');
 // import jwt from 'jsonwebtoken';
 const { verifySignUp, authJwt } = require("../middlewares");
 const UserService = require('../services/user.js');
-// import * as mailer from '../services/mailer';
 const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
-// import { Pool } from 'mysql2/promise';
-// const User = require('../models/user.js')
+
 
 /**
  * @apiDefine AuthGroup Auth API
@@ -43,7 +41,7 @@ const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
    app.post(
      "/api/auth/createUser",
      [
-       verifySignUp.checkDuplicateUsernameOrEmail
+       verifySignUp.checkDuplicateEmail
      ],
      UserService.createUser
    );

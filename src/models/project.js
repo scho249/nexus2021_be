@@ -23,13 +23,13 @@ const projectSchema = new mongoose.Schema({
       type: String,
       enum:['1-3 months','3-6 months','6-9 months', 'More than 9 months']},
     created_date: { type: Date },
-    end_date: Date
+    end_date: {type: Date }
   },
   updated_at: { type: Date },
   description: { type: String, required: true },
   skill: [{ type: String }],
   roles:  [{ type: String }],
-  interests:  [{ type: String }]
+  categories:  [{ type: String }]
 })
 
 module.exports = mongoose.model('Project', projectSchema)
