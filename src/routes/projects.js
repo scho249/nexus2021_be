@@ -5,11 +5,9 @@
 
 const { Router, Request, Response, NextFunction } = require('express')
 const passport = require('passport');
-
-const { verifySignUp, authJwt } = require("../middlewares");
+const { verifyInfo, authJwt } = require("../middlewares");
 const ProjectService = require('../services/project.js');
 const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
-// const User = require('../models/user.js')
 
 /**
  * @apiDefine Project API
@@ -96,34 +94,98 @@ module.exports = function(app) {
         );
         next();
       });
+
       /**
-     * @api {post} /projects Create a new Project
-     * @apiGroup ProjectGroup
+     * @api {post} api/project/createProject  Create a new Project
+     * @apiGroup NexusBuilders
      * @apiName CreateProject
      *
      * @apiUse JwtHeader
      *
-     * @apiParam {Object} details              Project details
-     * @apiParam {String} details.title        Project title
-     * @apiParam {String} details.description  Project description
-     * @apiParam {String} details.duration     Project duration
-     * @apiParam {String} details.size         Project team size
-     * @apiParam {String} details.postal       Project postal code
+     * @apiParam {String} title                 Project title
+     * @apiParam {String} size                  Project size
+                                    ['Micro','Small','Medium','Large']
+     * @apiParam {String} location              Project location
+     * @apiParam {String} duration              Project duration
+        ['1-3 months','3-6 months','6-9 months', 'More than 9 months']
+     * @apiParam {String} description           Project description
+     * @apiParam [{String}] categories          Project categories
+     * @apiParam [Array] Roles                  Project roles
+              - {String} Title                  Role title
+              - [{String}] skill                Role skills
      *
      * @apiSuccess {Number} projectId Project ID
-     */
-
+     **/
     app.post(
          "/api/project/createProject",
          [
-           authJwt
+           authJwt, verifyInfo.checkDuplicateProjectTitles
          ],
          ProjectService.createProject
     );
+
+    /**
+   * @api {get} api/project/allProjects    Fetch projects
+   * @apiGroup NexusBuilders
+   * @apiName AllProjects
+   *
+   * @apiUse JwtHeader
+   *
+   * @apiParam {}
+   *
+   * @apiSuccess json detailing all projects
+   **/
+    app.get(
+         "/api/project/allProjects",
+         [
+           authJwt
+         ],
+         ProjectService.getProjects
+    );
+
+    /**
+    * @api {get} api/project/projectsOwned    Fetch projects owned by user
+    * @apiGroup NexusBuilders
+    * @apiName ProjectsOwned
+    *
+    * @apiUse JwtHeader
+    *
+    * @apiParam {user._id} req.id               User ID
+    *
+    * @apiSuccess json detailing all projects owned by user
+    **/
+    app.get(
+         "/api/project/projectsOwned",
+         [
+           authJwt
+         ],
+         ProjectService.getProjectsOwned
+    );
+
+    /** UPDATE PROJECT DOCUMENT
+    * @api {get} api/project/updateProject         Update chosen project
+    * @apiGroup NexusBuilders
+    * @apiName UpdateProject
+    *
+    * @apiUse JwtHeader
+    *
+    * @apiParam {String} title                 Project title
+    * @apiParam {String} size                  Project size
+                                   ['Micro','Small','Medium','Large']
+    * @apiParam {String} location              Project location
+    * @apiParam {String} duration              Project duration
+       ['1-3 months','3-6 months','6-9 months', 'More than 9 months']
+    * @apiParam {String} description           Project description
+    * @apiParam [{String}] categories          Project categories
+    * @apiParam [Array] Roles                  Project roles
+             - {String} Title                  Role title
+             - [{String}] skill                Role skills
+    *
+    * @apiSuccess json detailing all projects owned by user
+    **/
+
+
 };
-
-
-
 
 // TODO: apidoc
 // router.get('/owned', getProjectsOwned(projectService));

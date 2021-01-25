@@ -1,6 +1,6 @@
 const config = require('../config/index.js');
-const User = require('../models/user.js')
-const mailer = require('./mailer/index.js')
+const User = require('../models/user.js');
+const mailer = require('./mailer/index.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -11,7 +11,7 @@ exports.signIn = (req, res) => {
         res.status(500).send({ message: err });
         return;
       }
-      console.log(user.email + "pass:" + user.password)
+      // console.log(user.email + "pass:" + user.password)
 
     var passwordIsValid = bcrypt.compareSync(
         req.body.password,

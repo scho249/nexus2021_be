@@ -1,9 +1,5 @@
 const { Router, Request, Response } = require('express')
-// const { Pool } = require('mysql2/promise')
 const passport = require('passport');
-
-const getDb = require("../db/db.js").getDb;
-const User = require("../models/user.js");
 
 // const result = require('../db/index.js')
 // const auth = require('./auth';
@@ -26,7 +22,7 @@ const User = require("../models/user.js");
 
 const router = Router();
 router.get('/', (req, res) => {
-  res.json('Adding user kwin right now...');
+  res.json('Index route');
 });
 
 module.exports = router

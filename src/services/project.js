@@ -12,60 +12,13 @@ const Project = require('../models/project.js')
 
 const jwt = require('jsonwebtoken');
 
-
-// exports.createProject = (req, res) => {
-//  // const { user } = req.email
-//      User.findOne({ email: req.body.email })
-//          .exec((err, user) => {
-//                if (err) {
-//                   res.status(500).send({ message: err });
-//                   return;
-//                 }
-//
-//                 const project = new Project({
-//                         title: req.body.title,
-//                         owner_id: user._id,
-//                         size: req.body.size,
-//                         team: [user._id],
-//                         location: {
-//                             city: req.body.location.city,
-//                             postal: req.body.location.postal },
-//                         status: 'New',
-//                         duration: {
-//                             length: req.body.duration.length,
-//                             created_date: Date.now },
-//                         updated_at: Date.now,
-//                         description: req.body.description,
-//                         skill: req.body.skill,
-//                         roles: req.body.roles,
-//                         interests: req.body.interests
-//                 });
-//
-//                 project.save((err, project) => {
-//                     if (err) {
-//                         res.status(500).send({ message: err });
-//                         return;
-//                     }
-//                     res.send({ message: "Project was added successfully!" });
-//                 });
-//
-//                 res.status(200).send({
-//                     id: user._id,
-//                     email: user.email,
-//                     project_id: project._id,
-//                 });
-//         });
-// };
-
 exports.createProject = (req, res) => {
     const project = new Project({
         title: req.body.title,
         owner_id: req.id,
         size: req.body.size,
         team: [req.id],
-        location: {
-            city: req.body.location.city,
-            postal: req.body.location.postal },
+        location: req.body.location,
         status: 'New',
         duration: {
             length: req.body.duration.length,
@@ -82,44 +35,34 @@ exports.createProject = (req, res) => {
             res.status(500).send({ message: err });
             return;
         }
-        res.send({ message: "Project was added successfully!" });
+        res.json({ message: "Project was added successfully!",
+                    project_id: project._id});
     });
 }
 
-//
-// async function createProject(username, details) {
-//   const { title, description, size, duration, postal, status } = details;
-//   const conn = await this.db.getConnection();
-//
-//   try {
-//     conn.beginTransaction();
-//     const projectParams = [username, title, description, size, duration, status || 'Active', postal];
-//     const [projectRes] = await conn.execute(SQL.insertProject, projectParams);
-//     const projectId = projectRes['insertId'];
-//
-//     await conn.commit();
-//     conn.release();
-//
-//     return projectId;
-//   } catch (err) {
-//     await conn.rollback();
-//     conn.release();
-//     throw err;
-//   }
-// }
-//
-// const createSkill = function(projectId, skill) {
-//   return db.Comment.create(comment).then(docComment => {
-//     console.log("\n>> Created Comment:\n", docComment);
-//
-//     return db.Tutorial.findByIdAndUpdate(
-//       tutorialId,
-//       { $push: { comments: docComment._id } },
-//       { new: true, useFindAndModify: false }
-//     );
-//   });
-// };
-//
+exports.getProjects = (req,res) => {
+    Project.find({ })
+           .exec((err, projects) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          res.json({ projects });
+      });
+};
+
+exports.getProjectsOwned = (req,res) => {
+    Project.find({ owner_id: req.id })
+           .exec((err, projects) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+          res.json({ projects });
+      });
+};
+
 // //   async validateOwner (projectId, username) {
 // //       const [res] = await this.db.execute(SQL.getOwnerUsername, [projectId]);
 // //       if (!res[0] || username != res[0].username) {
@@ -158,16 +101,7 @@ exports.createProject = (req, res) => {
 // // //       throw err;
 // // //     }
 // // //   }
-// // //
-// // //   async function getProjectsOwned(username) {
-// // //     try {
-// // //       const [res] = await this.db.execute(SQL.getProjectsOwned, [username]);
-// // //       // return res as ProjectDetails[];
-// // //       return res;
-// // //     } catch (err) {
-// // //       throw err;
-// // //     }
-// // //   }
+//
 // // //
 // // //   async function getProject(projectId) {
 // // //     try {

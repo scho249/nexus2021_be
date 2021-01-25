@@ -2,7 +2,7 @@ const { Router, Request, Response, NextFunction } = require('express')
 const passport = require('passport');
 
 // import jwt from 'jsonwebtoken';
-const { verifySignUp, authJwt } = require("../middlewares");
+const { verifyInfo, authJwt } = require("../middlewares");
 const UserService = require('../services/user.js');
 const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
 
@@ -41,7 +41,7 @@ const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
    app.post(
      "/api/auth/createUser",
      [
-       verifySignUp.checkDuplicateEmail
+       verifyInfo.checkDuplicateEmail
      ],
      UserService.createUser
    );
@@ -55,15 +55,6 @@ const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
     * @apiParam {String} password Password
     */
     app.post("/api/auth/signIn", UserService.signIn);
-
-    /**
-     * @api {get} /auth/verify Verify JWT token
-     * @apiGroup AuthGroup
-     * @apiName VerifyJWT
-     *
-     * @apiUse JwtHeader
-     */
-    // app.get('/api/auth/verify', [ authJwt ], res.status(200).send("Token verified"));
 
     /**
      * @api {get} /auth/password-reset Request password reset token by email
@@ -86,10 +77,6 @@ const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
 
  };
 
-
-
-
-
 // const generateToken = async (req: Request, res: Response): Promise<void> => {
 //   const { username, userType, provider } = req.user as User;
 //   const token = jwt.sign({ username, userType }, JWT_SECRET, { expiresIn: '7d' });
@@ -102,8 +89,6 @@ const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
 //     res.json({ authenticated: true });
 //   }
 // };
-
-
 
   /**
    * @api {get} /auth/student/facebook Login with Facebook
