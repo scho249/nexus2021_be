@@ -137,9 +137,6 @@ module.exports = function(app) {
    **/
     app.get(
          "/api/project/allProjects",
-         [
-           authJwt
-         ],
          ProjectService.getProjects
     );
 
