@@ -41,14 +41,14 @@ exports.createProject = (req, res) => {
 }
 
 exports.getProjects = (req,res) => {
-    Project.find({ })
-           .exec((err, projects) => {
+    Project.find({ project._id: req.project_id })
+           .exec((err, project) => {
           if (err) {
             res.status(500).send({ message: err });
             return;
           }
 
-          res.json({ projects });
+          res.json({ project });
       });
 };
 

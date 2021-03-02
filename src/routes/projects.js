@@ -181,6 +181,12 @@ module.exports = function(app) {
     * @apiSuccess json detailing all projects owned by user
     **/
 
+    app.get(
+         "/api/project/{project_id}",
+         ProjectService.getProjects
+    );
+
+
 
 };
 
