@@ -36,6 +36,12 @@ app.use(express.static('public'))
 // parse requests of content-type - application/json
 app.use(cors(corsOptions));
 
+//possible fix the CORS issue - Ajay
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
