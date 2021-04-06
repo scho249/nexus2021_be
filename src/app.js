@@ -36,6 +36,13 @@ app.use(express.static('public'))
 // parse requests of content-type - application/json
 app.use(cors(corsOptions));
 
+// possible fix the CORS issue - Ajay's
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  next()
+});
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -50,31 +57,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-// initDb(function (err) {
-//     app.listen(PORT, (err) => {
-//         if (err) {
-//             throw err; //
-//         }
-//         console.log("API Up and running on port " + PORT);
-//     });
-// });
-
-// function initial()  {
-//   User.estimatedDocumentCount((err, count) => {
-//     if (!err && count === 0) {
-//         new User({
-//               email: 'kwin@kwin.com',
-//               password: bcrypt.hashSync('kwinkwin', 10),
-//               firstName: 'kwin',
-//               lastName: 'kwin'
-//       }).save(err => {
-//         if (err) {
-//           console.log("error", err);
-//         }
-//         console.log("added 'kwin' to users collection");
-//       });
-//   }});
-// };
 
 db.mongoose
   .connect(process.env.MONGODB_URI, {
@@ -92,3 +74,4 @@ db.mongoose
 
 require('./routes/auth.js')(app);
 require('./routes/projects.js')(app);
+require('./routes/profile.js')(app);
