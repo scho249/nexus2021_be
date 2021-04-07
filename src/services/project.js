@@ -41,6 +41,19 @@ exports.createProject = (req, res) => {
 }
 
 exports.getProjects = (req,res) => {
+    Project.find({ })
+           .exec((err, projects) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          res.json({ projects });
+      });
+};
+
+
+exports.getProjectbyId = (req,res) => {
     Project.find({ _id: req.params.project_id })
            .exec((err, project) => {
           if (err) {

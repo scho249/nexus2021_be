@@ -1,5 +1,6 @@
 const User = require('../models/user.js')
 const Project = require('../models/project.js')
+const Profile = require('../models/profile.js')
 
 checkDuplicateEmail = (req, res, next) => {
     // Email

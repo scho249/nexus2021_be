@@ -183,7 +183,7 @@ module.exports = function(app) {
 
     app.get(
          "/api/project/:project_id",
-         ProjectService.getProjects
+         ProjectService.getProjectbyId
     );
 
 
