@@ -14,7 +14,6 @@ authJwt = (req, res, next) => {
                 res.status(401).send({ message: "Unauthorized!" });
                 return;
             }
-            console.log(user.id)
             req.id = user.id;
             next();
         });

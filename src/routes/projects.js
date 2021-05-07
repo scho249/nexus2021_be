@@ -1,46 +1,15 @@
-// const { Router, Request, Response } = require('express')
-// const Project = require('../models/project.js')
-// const User = require('../models/user.js')
-// const getDb = require("./db/db.js").getDb
-
 const { Router, Request, Response, NextFunction } = require('express')
 const passport = require('passport');
 const { verifyInfo, authJwt } = require("../middlewares");
 const ProjectService = require('../services/project.js');
 const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
-
+const Project = require('../models/project.js')
 /**
  * @apiDefine Project API
  *
  * Handles all Project Profile operations.
  */
 
-// const getProjectsOwned = (srv: ProjectService) => async (req: Request, res: Response): Promise<void> => {
-//   const { username } = req.user as User;
-//
-//   try {
-//     const projects = await srv.getProjectsOwned(username);
-//     res.json(projects);
-//   } catch (error) {
-//     res.json({
-//       error: (error as Error).message,
-//     });
-//   }
-// };
-//
-// const getProjectById = (srv: ProjectService) => async (req: Request, res: Response): Promise<void> => {
-//   const { projectId } = req.params;
-//
-//   try {
-//     const project = await srv.getProject(projectId);
-//     res.json(project);
-//   } catch (error) {
-//     res.json({
-//       error: (error as Error).message,
-//     });
-//   }
-// };
-//
 // const updateProject = (srv: ProjectService) => async (req: Request, res: Response): Promise<void> => {
 //   const { projectId } = req.params;
 //   const project = req.body as Project;
@@ -64,20 +33,6 @@ const { JWT_SECRET, FE_ADDR, DOMAIN } = require('../config/index.js');
 //   try {
 //     await srv.deleteProject(username, projectId);
 //     res.json({ success: `Project id: ${projectId} deleted from database.` });
-//   } catch (error) {
-//     res.json({
-//       error: (error as Error).message,
-//     });
-//   }
-// };
-//
-// const getProjectContracts = (srv: ProjectService) => async (req: Request, res: Response): Promise<void> => {
-//   const { projectId } = req.params;
-//   const { username } = req.user as User;
-//
-//   try {
-//     const contracts = await srv.getProjectContracts(username, projectId);
-//     res.json(contracts);
 //   } catch (error) {
 //     res.json({
 //       error: (error as Error).message,
@@ -114,7 +69,8 @@ module.exports = function(app) {
               - {String} Title                  Role title
               - [{String}] skill                Role skills
      *
-     * @apiSuccess {Number} projectId Project ID
+     * @apiSuccess
+     *        Return success message with {Number}--projectId Project ID
      **/
     app.post(
          "/api/project/createProject",
@@ -125,7 +81,7 @@ module.exports = function(app) {
     );
 
     /**
-   * @api {get} api/project/allProjects    Fetch projects
+   * @api {get} api/project/allProjects    Fetch all projects
    * @apiGroup NexusBuilders
    * @apiName AllProjects
    *
@@ -133,12 +89,14 @@ module.exports = function(app) {
    *
    * @apiParam {}
    *
-   * @apiSuccess json detailing all projects
+   * @apiSuccess
+   *        Return json detailing all existing public projects
    **/
     app.get(
          "/api/project/allProjects",
          ProjectService.getProjects
     );
+
 
     /**
     * @api {get} api/project/projectsOwned    Fetch projects owned by user
@@ -149,7 +107,8 @@ module.exports = function(app) {
     *
     * @apiParam {user._id} req.id               User ID
     *
-    * @apiSuccess json detailing all projects owned by user
+    * @apiSuccess
+    *         Return json detailing all projects owned by user
     **/
     app.get(
          "/api/project/projectsOwned",
@@ -179,8 +138,24 @@ module.exports = function(app) {
              - [{String}] skill                Role skills
     *
     * @apiSuccess json detailing all projects owned by user
-    **/
+    // **/
+    // app.post(
+    //      "/api/project/update/:project_id",
+    //      ProjectService.updateProject
+    // );
 
+    /**
+    * @api {get} api/project/:project_id    Fetch project by its ID
+    * @apiGroup NexusBuilders
+    * @apiName ProjectsOwned
+    *
+    * @apiUse JwtHeader
+    *
+    * @apiParam project_id               Project ID
+    *
+    * @apiSuccess
+    *     Return json containing details of project given its ID
+    **/
     app.get(
          "/api/project/:project_id",
          ProjectService.getProjectbyId

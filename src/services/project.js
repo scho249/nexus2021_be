@@ -51,7 +51,18 @@ exports.getProjects = (req,res) => {
           res.json({ projects });
       });
 };
-
+//
+// exports.getProjectsArray = (req,res) => {
+//     Project.find({ })
+//            .exec((err, projects) => {
+//           if (err) {
+//             res.status(500).send({ message: err });
+//             return;
+//           }
+//           result=projects.toArray();
+//           res.send(result);
+//       });
+// };
 
 exports.getProjectbyId = (req,res) => {
     Project.find({ _id: req.params.project_id })
@@ -75,6 +86,34 @@ exports.getProjectsOwned = (req,res) => {
           res.json({ projects });
       });
 };
+
+//
+// exports.updateProject = (req, res) => {
+//     for (var field in req.body) {
+//         console.log(field+": "+ req.body[field]);
+//         Project.update(
+//             { _id: req.params.project_id },
+//             { $set:
+//                 {
+//                     {field}: req.body[field]
+//                 }
+//             }
+//         );
+//     }
+//     res.json({ message: "Project was attempted to update",
+//                project_id: req.params.project_id});
+
+    // Project.update({ _id: req.params.project_id },
+    //                {$set: {}}
+    // )
+    //        .exec((err, projects) => {
+    //       if (err) {
+    //         res.status(500).send({ message: err });
+    //         return;
+    //       }
+    //       res.json({ projects });
+    //   });
+// }
 
 // //   async validateOwner (projectId, username) {
 // //       const [res] = await this.db.execute(SQL.getOwnerUsername, [projectId]);

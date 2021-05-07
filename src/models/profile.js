@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const profileSchema = new mongoose.Schema({
   user_id:  {  type: String  },
+  resume_id: {  type: String  },
   fullName: { type: String },
   education: {
     campus: {

@@ -1,14 +1,12 @@
 const config = require('../config/index.js');
 const User = require('../models/user.js')
-const Profile = require('../models/profile.js')
+const Profile = require('../models/profile.js');
+const upload  = require("../app.js");
 
-const jwt = require('jsonwebtoken');
-
-// checkProfileExists = (req, res) => {
-//
-// };
-
-exports.createProfile = (req, res) => {
+exports.createProfile = (upload, req, res) => {
+    console.log('here');
+    upload.single('file');
+    console.log("File was uploaded successfully!");
     Profile.findOne({ user_id: req.params.user_id })
            .exec((err, profile) => {
                if (err) {
@@ -18,6 +16,8 @@ exports.createProfile = (req, res) => {
                    res.status(400).send({message: "Profile already exists"});
                    return;
                } else {
+                   console.log(req.resume_id);
+
                    const profile = new Profile({
                        user_id: req.params.user_id,
                        fullName: req.body.fullName,
@@ -31,6 +31,7 @@ exports.createProfile = (req, res) => {
                        created_at: new Date(Date.now()),
                        updated_at: new Date(Date.now()),
                    });
+
                    profile.save((err1, profile) => {
                        if (err1) {
                            res.status(500).send({ message: err1 });
